@@ -1,0 +1,51 @@
+				Conn.Open();
+                if (DbServerType.ToLower() == "dm8")
+                {
+                    myDr = Cmd.ExecuteReader() as DmDataReader;
+                }
+                else
+                {
+                    myDr = Cmd.ExecuteReader() as SqlDataReader;
+                }
+                if (myDr.Read())
+				{   
+					int pc=int.Parse(myDr["pc"].ToString());
+					int rc=int.Parse(myDr["rc"].ToString());
+					oe.SetBaseClassText(webctls[1],pc.ToString());
+					oe.SetBaseClassText(webctls[2],rc.ToString());
+					oe.SetBaseClassText(webctls[0],(_now+1).ToString());
+					if(webctls.Length>4)
+					{
+						oe.SetBaseClassText(webctls[4],(_now+1).ToString());
+					}
+					if(GroupFuncs!=null)
+					{
+						for(int i=0;i<GroupFuncs.Count;i++)
+						{
+							string[] rv=(string[])GroupFuncs[i];
+							oe.SetBaseClassText(rv[3],myDr[rv[1]].ToString());
+						}
+					}
+				}
+ 
+				if(myDr.NextResult())
+				{
+					dbgrid.DataSource=myDr;
+					dbgrid.DataBind();
+				}
+				myDr.Close();
+			}
+			catch (Exception ex)
+			{
+				_info=ex.Message;
+ 
+			}
+ 
+			finally
+			{
+				Conn.Close();
+				Conn.Dispose();
+			}
+			return _info;
+}//pageview
+
