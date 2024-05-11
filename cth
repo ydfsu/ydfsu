@@ -1,0 +1,18 @@
+/** 
+   * see BillingManager#getBillingInfo(BillingInfo) 
+   */ 
+  public BillingInfo getBillingInfo(BillingInfo inBillingInfo) 
+         throws BillingException 
+  { 
+    if (GET_BILLING_INFO_RESPONSE == NULL) 
+      return null; 
+ 
+    if (GET_BILLING_INFO_RESPONSE == EXCEPTION) 
+      throw new NullPointerException("Developer Null Pointer"); 
+ 
+    if (GET_BILLING_INFO_RESPONSE == BILLING_EXCEPTION) 
+      throw new BillingException("Developer Billing Exception"); 
+ 
+    // Set IsAuthorizeNeeded flag 
+    inBillingInfo.setAuthorizeNeeded(true); 
+    return inBillingInfo; 
