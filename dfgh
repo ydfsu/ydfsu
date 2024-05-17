@@ -1,0 +1,20 @@
+    # 遍历
+    for user in friends:
+        # 判断省份是否存在，有可能是外国的，这种情况不考虑
+        if (user.province in province_dict):
+            key = user.province
+            province_dict[key] += 1
+
+    province = list(province_dict.keys())
+    values = list(province_dict.values())
+
+
+    # maptype='china' 只显示全国直辖市和省级，数据只能是省名和直辖市的名称
+    map = Map()
+    map.add("微信好友地区分布", [list(z) for z in zip(province, values)], "china")
+    map.set_global_opts(
+            title_opts=opts.TitleOpts(title="微信好友地区分布"),
+            visualmap_opts=opts.VisualMapOpts(),
+        )
+    map.render(path="data/好友地区分布.html")
+
