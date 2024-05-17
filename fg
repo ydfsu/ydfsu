@@ -1,0 +1,25 @@
+
+# 分析好友性别比例
+def sex_ratio():
+
+    # 初始化
+    male, female, other = 0, 0, 0
+
+    # 遍历
+    for user in friends:
+        if(user.sex == 1):
+            male += 1
+        elif(user.sex == 2):
+            female += 1
+        else:
+            other += 1
+
+    name_list = ['男性', '女性', '未设置']
+    num_list = [male, female, other]
+
+    pie = Pie()
+    pie.add("微信好友性别比例", [list(z) for z in zip(name_list, num_list)])
+    pie.set_global_opts(title_opts=opts.TitleOpts(title="微信好友性别比例"))
+    pie.set_series_opts(label_opts=opts.LabelOpts(formatter="{b}: {c}"))
+    pie.render('data/好友性别比例.html')
+
