@@ -1,0 +1,69 @@
+# -*- coding:utf-8 -*-
+
+# 引用自定义库
+from qq_bot import *
+from static_data import *
+
+# 引用第三方库
+from threading import Thread
+from os.path import exists
+from os import makedirs
+from shutil import rmtree
+from base64 import b64decode
+import time
+
+
+# 初始化所需文件夹
+def init_folders():
+
+    for dir in ['data']:
+        if(not (exists(dir))):
+            # 目录不存在时则创建
+            makedirs(dir)
+        else:
+            # 目录存在时则先删除递归删除该目录再重新创建
+            rmtree(dir)
+            makedirs(dir)
+
+
+# 写入相关资源文件到本地
+def write_data():
+
+    key_dict = {
+        'qq_icon':qq_icon,
+        'level_star':level_star,
+        'level_moon':level_moon,
+        'level_sun':level_sun,
+        'level_crown':level_crown
+    }
+    for name in ['qq_icon', 'level_star', 'level_moon', 'level_sun', 'level_crown']:
+        # 保存qq_icon图片到本地data目录
+        with open('data/' + name + '.png', 'wb') as file:
+            # 解码图片
+            png = b64decode(key_dict[name])
+            # 将解码得到的数据写入到图片中
+            file.write(png)
+
+
+# 根据Q等级绘制等级图标
+def calculate_level(level):
+    level = int(level)
+    star_count = 0
+    moon_count = 0
+    sun_count = 0
+    crown_count = 0
+
+    # //表示向下取整 %表示取余
+    crown_count = level // 64
+    tmp = level % 64
+
+    sun_count = tmp // 16
+    tmp = tmp % 16
+
+    moon_count = tmp // 4
+    tmp = tmp % 4
+
+    star_count = tmp // 1
+
+    return star_count, moon_count, sun_count, crown_count
+
