@@ -1,0 +1,85 @@
+final Node<K,V>[] resize() {
+        //记录一下之前的table
+        Node<K,V>[] oldTab = table;
+        //算一下之前table的容量
+        int oldCap = (oldTab == null) ? 0 : oldTab.length;
+        //记录一下之前table的扩容阈值
+        int oldThr = threshold;
+        //把新的容量和扩容阈值定义出来
+        int newCap, newThr = 0;
+        //如果已经进行过初始化了
+        if (oldCap > 0) {
+            //如果我们之前的空间大小已经达到了最大容量 -- 很少出现
+            if (oldCap >= MAXIMUM_CAPACITY) {
+                threshold = Integer.MAX_VALUE;
+                return oldTab;
+            }
+            //否则的话 我们新的容量等于旧的容量*2  位移运算
+            else if ((newCap = oldCap << 1) < MAXIMUM_CAPACITY &&
+                     oldCap >= DEFAULT_INITIAL_CAPACITY)
+                //新的扩容阈值也*2
+                newThr = oldThr << 1; // double threshold
+        }
+        //这个先不说了
+        else if (oldThr > 0) // initial capacity was placed in threshold
+            newCap = oldThr;
+       // 这个else重要啊，如果我们没有进行过初始化，那我们就把新容量定位16 新的扩容阈值定为12
+         else {               // zero initial threshold signifies using defaults
+            newCap = DEFAULT_INITIAL_CAPACITY;
+            newThr = (int)(DEFAULT_LOAD_FACTOR * DEFAULT_INITIAL_CAPACITY);
+        }
+        //如果新的扩容阈值等于0 我们要进行处理等于新的容量×负载因子
+        if (newThr == 0) {
+            float ft = (float)newCap * loadFactor;
+            newThr = (newCap < MAXIMUM_CAPACITY && ft < (float)MAXIMUM_CAPACITY ?
+                      (int)ft : Integer.MAX_VALUE);
+        }
+        //修改我们的扩容阈值
+        threshold = newThr;
+        @SuppressWarnings({"rawtypes","unchecked"})
+        Node<K,V>[] newTab = (Node<K,V>[])new Node[newCap];
+        table = newTab;
+        if (oldTab != null) {
+            for (int j = 0; j < oldCap; ++j) {
+                Node<K,V> e;
+                if ((e = oldTab[j]) != null) {
+                    oldTab[j] = null;
+                    if (e.next == null)
+                        newTab[e.hash & (newCap - 1)] = e;
+                    else if (e instanceof TreeNode)
+                        ((TreeNode<K,V>)e).split(this, newTab, j, oldCap);
+                    else { // preserve order
+                        Node<K,V> loHead = null, loTail = null;
+                        Node<K,V> hiHead = null, hiTail = null;
+                        Node<K,V> next;
+                        do {
+                            next = e.next;
+                            if ((e.hash & oldCap) == 0) {
+                                if (loTail == null)
+                                    loHead = e;
+                                else
+                                    loTail.next = e;
+                                loTail = e;
+                            }
+                            else {
+                                if (hiTail == null)
+                                    hiHead = e;
+                                else
+                                    hiTail.next = e;
+                                hiTail = e;
+                            }
+                        } while ((e = next) != null);
+                        if (loTail != null) {
+                            loTail.next = null;
+                            newTab[j] = loHead;
+                        }
+                        if (hiTail != null) {
+                            hiTail.next = null;
+                            newTab[j + oldCap] = hiHead;
+                        }
+                    }
+                }
+            }
+        }
+        return newTab;
+    }
