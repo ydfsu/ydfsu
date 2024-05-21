@@ -1,0 +1,30 @@
+ info_str = "壁纸类型："
+    for index, p_type in enumerate(res_json):
+        info_str = info_str + "{} {}".format(index, p_type['langs']['zh-Hans-CN'])
+        if index != len(res_json) - 1:
+            info_str = info_str + ", "
+
+    # 选择壁纸类型，并判断输入是否正确
+    while True:
+        wall_paper_id = input(info_str + "\n请输入编号以便选择5K超清壁纸类型：")
+        wall_paper_id = wall_paper_id.strip()
+        wall_paper_id = int(wall_paper_id)
+        if wall_paper_id >= len(res_json) or wall_paper_id < 0:
+            continue
+        else:
+            break
+
+    # 选择壁纸数量，并判断输入是否正确
+    while True:
+        wall_paper_count = input("请输入要下载的5K超清壁纸的数量：")
+        wall_paper_count = wall_paper_count.strip()
+        wall_paper_count = int(wall_paper_count)
+        if wall_paper_count <= 0:
+            continue
+        else:
+            break
+
+    # 开始爬取5K高清壁纸
+    print("正在下载5K超清壁纸，请稍等……")
+    crawler_photo(res_json[wall_paper_id]['_id'], wall_paper_count)
+    print('\n下载5K高清壁纸完毕，壁纸位于当前的{}目录。'.format(res_json[wall_paper_id]['_id']))
