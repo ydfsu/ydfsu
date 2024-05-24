@@ -1,0 +1,72 @@
+            # 是否加上随机表情
+            if(flag_wx_emoj):
+                message = message + choice(str_list_emoj)
+
+            send_message(message)
+            print("提醒女友晚上睡觉:%s" % time.ctime())
+
+
+
+
+
+        # 节日问候语
+        festival_month = time.strftime('%m', time.localtime())
+        festival_day = time.strftime('%d', time.localtime())
+
+        if(festival_month == '02' and festival_day == '14' and now_time == "08:00"):
+            send_message(str_Valentine)
+            print("发送情人节祝福:%s" % time.ctime())
+
+        elif(festival_month == '03' and festival_day == '08' and now_time == "08:00"):
+            send_message(str_Women)
+            print("发送三八妇女节祝福:%s" % time.ctime())
+
+        elif(festival_month == '12' and festival_day == '24' and now_time == "00:00"):
+            send_message(str_Christmas_Eve)
+            print("发送平安夜祝福:%s" % time.ctime())
+
+        elif(festival_month == '12' and festival_day == '25' and now_time == "00:00"):
+            send_message(str_Christmas)
+            print("发送圣诞节祝福:%s" % time.ctime())
+
+
+
+        # 生日问候语
+        if(festival_month == birthday_month and festival_day == birthday_day and now_time == "00:00"):
+            send_message(str_birthday)
+            print("发送生日祝福:%s" % time.ctime())
+
+
+
+
+
+
+        # 每60秒检测一次
+        time.sleep(60)
+
+
+
+
+
+if __name__ == "__main__":
+
+    # 若发现读取取配置文件出错，可以取消注释下面这行，一般在pycharm环境下才需要增加
+    # 设置当前文件所在的目录为当前工作路径
+    # chdir(sys.path[0])
+
+
+    # 启动微信机器人，自动根据操作系统执行不同的指令
+    # windows系统或macOS Sierra系统使用bot = Bot()
+    # linux系统或macOS Terminal系统使用bot = Bot(console_qr=2)
+    if('Windows' in system()):
+        # Windows
+        bot = Bot()
+    elif('Darwin' in system()):
+        # MacOSX
+        bot = Bot()
+    elif('Linux' in system()):
+        # Linux
+        bot = Bot(console_qr=2,cache_path=True)
+    else:
+        # 自行确定
+        print("无法识别你的操作系统类型，请自己设置")
