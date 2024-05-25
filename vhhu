@@ -1,0 +1,37 @@
+ 
+#导入了必要的模块requests和os
+import requests
+import os
+ 
+ 
+# 定义了一个函数get_html(url)，
+# 用于发送GET请求获取指定URL的响应数据。函数中设置了请求头部信息，
+# 以模拟浏览器的请求。函数返回响应数据的JSON格式内容
+def get_html(url):
+    header = {
+        'user-agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/74.0.3729.169 Safari/537.36'
+    }
+    response = requests.get(url=url, headers=header)
+    # print(response.json())
+    html = response.json()
+    return html
+ 
+ 
+# 定义了一个函数parse_html(html)，
+# 用于解析响应数据中的图片信息。通过分析响应数据的结构，
+# 提取出每个图片的URL和标题，并将其存储在一个字典中，然后将所有字典组成的列表返回
+def parse_html(html):
+    rl_list = html['data']['rl']
+    # print(rl_list)
+    img_info_list = []
+    for rl in rl_list:
+        img_info = {}
+        img_info['img_url'] = rl['rs1']
+        img_info['title'] = rl['nn']
+        # print(img_url)
+        # exit()
+        img_info_list.append(img_info)
+    # print(img_info_list)
+    return img_info_list
+ 
+ 
