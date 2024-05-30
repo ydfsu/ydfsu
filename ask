@@ -1,0 +1,33 @@
+import tkinter as tk
+import tkinter.messagebox
+root = tk.Tk()
+root.title('❤')
+root.resizable(0, 0)
+root.wm_attributes("-toolwindow", 1)
+screenwidth = root.winfo_screenwidth()
+screenheight = root.winfo_screenheight()
+widths = 300
+heights = 100
+x = (screenwidth - widths) / 2
+y = (screenheight - heights) / 2
+root.geometry('%dx%d+%d+%d' % (widths, heights, x, y))  # 设置在屏幕中居中显示
+tk.Label(root, text='亲爱的，做我女朋友好吗？', width=37, font=('宋体', 12)).place(x=0, y=10)
+
+
+def OK():  # 同意按钮
+    root.destroy()
+    # 同意后显示漂浮爱心
+
+
+def NO():  # 拒绝按钮，拒绝不会退出，必须同意才可以退出哦~
+    tk.messagebox.showwarning('❤', '再给你一次机会！')
+
+
+def closeWindow():
+    tk.messagebox.showwarning('❤', '逃避是没有用的哦')
+
+
+tk.Button(root, text='好哦', width=5, height=1, command=OK).place(x=80, y=50)
+tk.Button(root, text='不要', width=5, height=1, command=NO).place(x=160, y=50)
+root.protocol('WM_DELETE_WINDOW', closeWindow)  # 绑定退出事件
+root.mainloop()
