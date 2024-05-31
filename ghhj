@@ -1,0 +1,48 @@
+private boolean hasData(Connection conn, String tableName) throws SQLException {
+    try (Statement stmt = conn.createStatement();
+         ResultSet rs = stmt.executeQuery("SELECT COUNT(*) FROM " + tableName)) {
+        if (rs.next()) {
+            return rs.getInt(1) > 0;
+        }
+        return false;
+    }
+}
+private void writeTableData(Connection conn, BufferedWriter writer, String tableName) throws SQLException, IOException {
+    String selectQuery = "SELECT * FROM " + tableName;
+    try (Statement stmt = conn.createStatement();
+         ResultSet rs = stmt.executeQuery(selectQuery)) {
+        ResultSetMetaData rsmd = rs.getMetaData();
+
+        boolean firstRow = true;
+        while (rs.next()) {
+            if (firstRow) {
+                writer.write("INSERT INTO " + tableName + " VALUES \n");
+                firstRow = false;
+            } else {
+                writer.write(",\n");
+            }
+            writer.write("(");
+            for (int i = 1; i <= rsmd.getColumnCount(); i++) {
+                Object value = rs.getObject(i);
+                if (value != null) {
+                    String valueString = value.toString().replace("'", "''");
+                    if (value instanceof String || value instanceof Timestamp || value instanceof Date) {
+                        writer.write("'" + valueString + "'");
+                    } else {
+                        writer.write(valueString);
+                    }
+                } else {
+                    writer.write("NULL");
+                }
+                if (i < rsmd.getColumnCount()) {
+                    writer.write(", ");
+                }
+            }
+            writer.write(")");
+        }
+        // 如果至少写入了一行数据，才需要结束SQL语句
+        if (!firstRow) {
+            writer.write(";\n\n");
+        }
+    }
+}
