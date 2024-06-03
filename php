@@ -1,0 +1,18 @@
+<?php
+//接收上传的数据，（图片base+64）
+$imgbase64=$_POST['imgbase64'];
+//将base64解析为图片
+$data=explode(',',$imgbase64)[1];
+$img=base64_decode($data);
+//图片上传到指定的途径，项目文件内
+//没有路径创造路径
+$str="images/my/";
+if(!file_exists($str)){
+    mkdir($str);
+}
+//获取上传图片的类型
+$type=explode("/",explode(";",$imgbase64)[0])[1];
+$imgName=date("Y-m-d")."-".uniqid().".".$type;
+$imgsrc=$str.$imgName;
+@file_put_contents($str.'header.png',$img);
+?>
