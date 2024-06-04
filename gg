@@ -1,0 +1,127 @@
+using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Data;
+using System.Drawing;
+using System.Linq;
+using System.Text;
+using System.Windows.Forms;
+
+namespace QQ_2021
+{
+    public partial class Login : Form
+    {
+        public Login()
+        {
+            InitializeComponent();
+        }
+        Point downPoint;
+        private void pictureBox1_MouseDown(object sender, MouseEventArgs e)
+        {
+            downPoint = new Point(e.X, e.Y);
+        }
+
+        private void pictureBox1_MouseMove_1(object sender, MouseEventArgs e)
+        {
+            if (e.Button == MouseButtons.Left)
+            {
+                this.Location = new Point(this.Location.X + e.X - downPoint.X,
+                this.Location.Y + e.Y - downPoint.Y);
+            }
+        }
+
+        private void btn关闭_Click(object sender, EventArgs e)
+        {
+            this.Close();
+        }
+
+        private void btn最小化_Click(object sender, EventArgs e)
+        {
+            this.WindowState = FormWindowState.Minimized;
+        }
+
+        private void Login_Load(object sender, EventArgs e)
+        {
+            btn关闭.BackColor = Color.Transparent;
+            btn关闭.Parent = pictureBox1;
+            btn最小化.BackColor = Color.Transparent;
+            btn最小化.Parent = pictureBox1;
+
+            if ( ck记住密码.Checked == true)
+            {
+                txt用户名.Text = userName;
+                txt密码.PasswordChar = Convert.ToChar("*");
+                txt密码.Text =passWord;
+            }
+            else
+            {
+
+            }
+        }
+
+        private void btn关闭_MouseMove(object sender, MouseEventArgs e)
+        {
+            btn关闭.BackColor = System.Drawing.Color.Red;
+        }
+
+        private void btn关闭_MouseLeave(object sender, EventArgs e)
+        {
+            btn关闭.BackColor = Color.Transparent;
+            btn关闭.Parent = pictureBox1;
+        }
+
+        private void txt用户名_Click(object sender, EventArgs e)
+        {
+            txt用户名.Clear();
+        }
+
+        private void txt密码_Click(object sender, EventArgs e)
+        {
+            txt密码.Clear();
+            txt密码.PasswordChar = Convert.ToChar("*"); 
+        }
+
+        public string userName = "zhouhui";
+        public string passWord = "123456";
+        private void btn登录_Click(object sender, EventArgs e)
+        {
+            
+
+            if (txt用户名.Text == userName)
+            {
+                if (txt密码.Text == passWord)
+                {
+                    QQ frm = new QQ();//定义了一个对象
+                    frm.Show();//打开新窗口
+                    this.Hide();//隐藏自己
+                }
+                else
+                {
+                    MessageBox.Show("密码错误，请重新输入！");
+                    txt密码.Clear();
+                }
+
+            }
+        }
+
+        private void ck记住密码_CheckedChanged(object sender, EventArgs e)
+        {
+             if ( ck记住密码.Checked == true)
+            {
+                txt用户名.Text = userName;
+                txt密码.PasswordChar = Convert.ToChar("*");
+                txt密码.Text =passWord;
+            }
+            else
+            {
+
+            }
+        }
+
+       
+        
+       
+
+
+    }
+}
