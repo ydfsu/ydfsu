@@ -1,0 +1,19 @@
+public class QuestionService {
+    public boolean addQuestion(String questionContent, String answer) {
+        // 调用数据库操作类，进行试题添加操作
+        // ...
+        return true;
+    }
+
+    public boolean deleteQuestion(int questionId) {
+        // 调用数据库操作类，进行试题删除操作
+        // ...
+        return true;
+    }
+
+    public boolean updateQuestion(int questionId, String newContent, String newAnswer) {
+        // 调用数据库操作类，进行试题信息修改操作
+        // ...
+        return true;
+    }
+}
