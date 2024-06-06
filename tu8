@@ -1,0 +1,10 @@
+<!--index.wxml-->
+<view class="player player-{{isPlayingMusic ? 'play':'pause'}}" bindtap="play">
+<image src="/images/images/music_icon.png"/>
+<image src="/images/images/music_play.png"/>
+</view>
+data: {
+    isPlayingMusic:false,
+}
+
+
