@@ -1,0 +1,10 @@
+import jsPDF from 'jspdf';
+ 
+// 创建一个PDF实例
+const pdf = new jsPDF();
+ 
+// 添加内容
+pdf.text('Hello world!', 10, 10);
+ 
+// 保存为PDF文件
+pdf.save('example.pdf');
