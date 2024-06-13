@@ -1,0 +1,50 @@
+ //获取各元素，方便操作
+    var box=my$("box");
+    var inner=box.children[0];
+    var ulObj=inner.children[0];
+    var list=ulObj.children;
+    var olObj=inner.children[1];
+    var arr=my$("arr");
+    var imgWidth=inner.offsetWidth;
+    var right=my$("right");
+    var pic=0;
+    //根据li个数，创建小按钮
+    for(var i=0;i<list.length;i++){
+        var liObj=document.createElement("li");
+ 
+        olObj.appendChild(liObj);
+        liObj.innerText=(i+1);
+        liObj.setAttribute("index",i);
+ 
+        //为按钮注册mouseover事件
+        liObj.onmouseover=function () {
+            //先清除所有按钮的样式
+ 
+            for (var j=0;j<olObj.children.length;j++){
+                olObj.children[j].removeAttribute("class");
+            }
+            this.className="current";
+            pic=this.getAttribute("index");
+            animate(ulObj,-pic*imgWidth);
+        }
+ 
+    }
+ 
+ 
+    //设置ol中第一个li有背景颜色
+    olObj.children[0].className = "current";
+    //克隆一个ul中第一个li,加入到ul中的最后=====克隆
+    ulObj.appendChild(ulObj.children[0].cloneNode(true));
+ 
+    var timeId=setInterval(onmouseclickHandle,2000);
+    //左右焦点实现点击切换图片功能
+    box.onmouseover=function () {
+        arr.style.display="block";
+        clearInterval(timeId);
+    };
+    box.onmouseout=function () {
+        arr.style.display="none";
+        timeId=setInterval(onmouseclickHandle,2000);
+    };
+ 
+   
