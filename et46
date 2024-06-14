@@ -1,0 +1,27 @@
+            async submitRegister() {
+                try {
+                    const response = await fetch('/register', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify(this.registerForm),
+                    });
+ 
+                    const data = await response.json();
+                    console.log('服务器响应:', data);
+ 
+                    // 根据服务器响应处理逻辑
+                } catch (error) {
+                    console.error('注册时发生错误:', error);
+                }
+            },
+        },
+    });
+ 
+ 
+</script>
+ 
+</body>
+ 
+</html>
