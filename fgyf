@@ -1,0 +1,67 @@
+def searh_movie_in_rating(self):
+        """
+        从排行榜中搜索符合条件的影片信息
+        """
+
+        # 按钮设置为灰色状态
+        self.clear_tree(self.treeview)  # 清空表格
+        self.B_0['state'] = DISABLED
+        self.C_type['state'] = DISABLED
+        self.T_count['state'] = DISABLED
+        self.T_rating['state'] = DISABLED
+        self.T_vote['state'] = DISABLED
+        self.B_0_keyword['state'] = DISABLED
+        self.T_vote_keyword['state'] = DISABLED
+        self.B_0['text'] = '正在努力搜索'
+        self.jsonData = ""
+
+        jsonMovieData = loads(movieData)
+        for subMovieData in jsonMovieData:
+            if(subMovieData['title'] == self.C_type.get()):
+                res_data = get_url_data_in_ranking_list(subMovieData['type'], self.T_count.get(), self.T_rating.get(), self.T_vote.get())  # 返回符合条件的电影信息
+                if len(res_data) == 2:
+                    # 获取数据成功
+                    res_list = res_data[0]
+                    jsonData = res_data[1]
+
+                    self.jsonData = jsonData
+                    self.add_tree(res_list, self.treeview)  # 将数据添加到tree中
+
+                else:
+                    # 获取数据失败，出现异常
+                    err_str = res_data[0]
+                    messagebox.showinfo('提示', err_str[:1000])
+
+        # 按钮设置为正常状态
+        self.B_0['state'] = NORMAL
+        self.C_type['state'] = 'readonly'
+        self.T_count['state'] = NORMAL
+        self.T_rating['state'] = NORMAL
+        self.T_vote['state'] = NORMAL
+        self.B_0_keyword['state'] = NORMAL
+        self.T_vote_keyword['state'] = NORMAL
+        self.B_0['text'] = '从排行榜搜索'
+
+    def keyboard_T_vote_keyword(self, event):
+        """
+        在搜索框中键入回车键后触发相应的事件
+        :param event:
+        :return:
+        """
+        thread_it(self.searh_movie_in_keyword)
+
+    def searh_movie_in_keyword(self):
+        """
+        从关键字中搜索符合条件的影片信息
+        """
+        # 按钮设置为灰色状态
+        self.clear_tree(self.treeview)  # 清空表格
+        self.B_0['state'] = DISABLED
+        self.C_type['state'] = DISABLED
+        self.T_count['state'] = DISABLED
+        self.T_rating['state'] = DISABLED
+        self.T_vote['state'] = DISABLED
+        self.B_0_keyword['state'] = DISABLED
+        self.T_vote_keyword['state'] = DISABLED
+        self.B_0_keyword['text'] = '正在努力搜索'
+        self.jsonData = ""
