@@ -1,0 +1,97 @@
+    let room_sys = await new ImRoomSys(params).save();
+    if (!room_sys) {
+      resMsg("保存消息失败", 400);
+      return;
+    }
+    // 找出对应的成员信息
+    let userinfo = await AuthorInfo.findOne(
+      { _id: author_id },
+      {
+        username: 1,
+        header_img: 1,
+      }
+    );
+    if (!userinfo) {
+      resMsg("用户信息不存在", 400);
+      return;
+    }
+    room_sys.author_id = userinfo;
+    sendMsgToRoom(room_id, room_sys);
+  });
+
+  /**
+   * 向一个房间内的所有在线用户推送房间的基本信息
+   * row 本次聊天信息
+   * name 触发事件的小别名
+   * **/
+  async function sendMsgToRoom(room_id, row = null, names = [], game_id = "") {
+    if (!room_id) return;
+
+    // 找出全部在线的成员
+    let members = await ImRoomMember.find(
+      {
+        im_room_id: room_id,
+        status: 1,
+      },
+      { socket_id: 1 }
+    );
+
+    if (!members || members.length === 0) return;
+    let sockets = members.map((item) => item.socket_id);
+
+    // 找出房间信息
+    let room = (await ImRoom.findOne({ _id: room_id, status: "1" })) || {};
+
+    // 查找出当前房间的总消息数
+    let roomSysCount = await ImRoomSys.find({
+      im_room_id: room_id,
+    }).countDocuments();
+
+    let res = {
+      data: room,
+      roomSysCount,
+      msg: "房间信息已更新",
+    };
+
+    if (names.length > 0) {
+      // 去重
+      names = [...new Set(names)];
+      for (let i = 0; i < names.length; i++) {
+        const item = names[i];
+        switch (item) {
+          case "members_change":
+            // 人员状态有变化
+            let roomMembers = await ImRoomMember.find(
+              { im_room_id: room_id },
+              { author_id: 1, status: 1, room_username: 1 }
+            )
+              .populate("author_id", "username header_img")
+              .exec();
+            res.roomMembers = roomMembers;
+            break;
+
+          case "gobang_members_change":
+            // 五子棋人员状态有变化
+            let gobangMembers = await GobangMember.find({ gobang_id: game_id })
+              .populate("author_id", "username header_img")
+              .exec();
+            Object.assign(res, {
+              gobangMembers,
+            });
+            break;
+
+          case "get_gb":
+            // 获取游戏的基本信息
+            let gameInfo = await Gobang.findOne({ _id: game_id });
+            if (gameInfo) {
+              res.gb_info = gameInfo;
+            }
+            break;
+
+          case "del_gobang":
+            res.is_del_gobang = true;
+            break;
+        }
+      }
+    }
+
