@@ -1,0 +1,10 @@
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.mysql',  # 加载mysql引擎
+        'NAME': 'db_goods',  # 数据库名称
+        'USER': 'root',  # mysql账户名
+        'PASSWORD': '123456',  # mysql账户密码
+        'PORT': 3306,  # 端口号
+        'HOST': 'localhost'
+    }
+}
