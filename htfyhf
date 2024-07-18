@@ -1,0 +1,17 @@
+import requests
+from PIL import Image
+import pytesseract
+ 
+# 获取验证码图片
+img_url = 'http://example.com/captcha_image.jpg'
+response = requests.get(img_url)
+img = Image.open(BytesIO(response.content))
+ 
+# 使用 pytesseract 识别验证码
+captcha_text = pytesseract.image_to_string(img)
+ 
+# 将识别结果提交给登录表单
+data['captcha'] = captcha_text
+ 
+# 发送带验证码的登录请求
+response = session.post(login_url, data=data)
