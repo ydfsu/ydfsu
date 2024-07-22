@@ -1,0 +1,11 @@
+public class Dog {
+    String name;
+
+    public void bark() {
+        System.out.println(name + " says: Bark!");
+    }
+}
+
+Dog myDog = new Dog();
+myDog.name = "Rex";
+myDog.bark();
