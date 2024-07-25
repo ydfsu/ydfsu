@@ -1,0 +1,20 @@
+interface ScrollInterface {
+  (scroller?: Scroller): ScrollAttribute;
+}
+Scroll() {
+  Text('Text1')// 子组件的高度小于Scroll高度，不会触发滚动
+    .fontSize(26)
+    .size({width: 180, height: 40})
+    .backgroundColor('#aabbcc')
+}
+.width('100%')
+.height(100)
+.backgroundColor(Color.Pink)
+
+declare class ScrollAttribute<T> extends CommonMethod<T> {
+  scrollable(value: ScrollDirection): T;
+  scrollBar(barState: BarState): T;
+  scrollBarColor(color: Color | number | string): T;
+  scrollBarWidth(value: number | string): T;
+  edgeEffect(edgeEffect: EdgeEffect): T;
+}
